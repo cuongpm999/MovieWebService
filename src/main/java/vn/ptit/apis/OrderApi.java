@@ -3,12 +3,11 @@ package vn.ptit.apis;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import vn.ptit.dtos.OrderDTO;
 import vn.ptit.services.OrderService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(path = "/api/order")
@@ -17,9 +16,28 @@ public class OrderApi {
     private OrderService orderService;
 
     @PostMapping("/insert")
-    public ResponseEntity<OrderDTO> insert(@RequestBody OrderDTO orderDTO){
+    public ResponseEntity<OrderDTO> insert(@RequestBody OrderDTO orderDTO) {
         OrderDTO res = orderService.insert(orderDTO);
         return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
+    @GetMapping("/find-by-username/{username}")
+    public ResponseEntity<List<OrderDTO>> findByUser(@PathVariable("username") String username) {
+        List<OrderDTO> res = orderService.findOrderByUser(username);
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
+    @GetMapping("/find-all")
+    public ResponseEntity<List<OrderDTO>> findAll() {
+        List<OrderDTO> res = orderService.findAll();
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
+    @GetMapping("/find/{id}")
+    public ResponseEntity<OrderDTO> findById(@PathVariable("id") int id) {
+        OrderDTO res = orderService.findById(id);
+        if (res != null) return new ResponseEntity<>(res, HttpStatus.OK);
+        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
 
 }

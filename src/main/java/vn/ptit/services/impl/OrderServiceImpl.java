@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import vn.ptit.dtos.CreditDTO;
+import vn.ptit.dtos.DealDTO;
 import vn.ptit.dtos.DigitalWalletDTO;
 import vn.ptit.dtos.OrderDTO;
 import vn.ptit.entities.Credit;
@@ -14,6 +15,10 @@ import vn.ptit.repositories.CreditRepository;
 import vn.ptit.repositories.DigitalWalletRepository;
 import vn.ptit.repositories.OrderRepository;
 import vn.ptit.services.OrderService;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -47,5 +52,59 @@ public class OrderServiceImpl implements OrderService {
         order = orderRepository.save(order);
         orderDTO = modelMapper.map(order,OrderDTO.class);
         return orderDTO;
+    }
+
+    @Override
+    public List<OrderDTO> findOrderByUser(String username) {
+        List<Order> orders = orderRepository.findByUser_UsernameOrderByStartAtDesc(username);
+        List<OrderDTO> orderDTOS = new ArrayList<>();
+        orders.forEach(o ->{
+            OrderDTO orderDTO = modelMapper.map(o,OrderDTO.class);
+            Optional<Credit> credit = creditRepository.findById(o.getPayment().getId());
+            Optional<DigitalWallet> digitalWallet = digitalWalletRepository.findById(o.getPayment().getId());
+            if(credit.isPresent())
+                orderDTO.setPayment(modelMapper.map(credit.get(),CreditDTO.class));
+            if(digitalWallet.isPresent())
+                orderDTO.setPayment(modelMapper.map(digitalWallet.get(), DigitalWalletDTO.class));
+
+            orderDTOS.add(orderDTO);
+        });
+
+        return orderDTOS;
+    }
+
+    @Override
+    public List<OrderDTO> findAll() {
+        List<Order> orders = orderRepository.findAll();
+        List<OrderDTO> orderDTOS = new ArrayList<>();
+        orders.forEach(o ->{
+            OrderDTO orderDTO = modelMapper.map(o,OrderDTO.class);
+            Optional<Credit> credit = creditRepository.findById(o.getPayment().getId());
+            Optional<DigitalWallet> digitalWallet = digitalWalletRepository.findById(o.getPayment().getId());
+            if(credit.isPresent())
+                orderDTO.setPayment(modelMapper.map(credit.get(),CreditDTO.class));
+            if(digitalWallet.isPresent())
+                orderDTO.setPayment(modelMapper.map(digitalWallet.get(), DigitalWalletDTO.class));
+
+            orderDTOS.add(orderDTO);
+        });
+
+        return orderDTOS;
+    }
+
+    @Override
+    public OrderDTO findById(int id) {
+        Optional<Order> order = orderRepository.findById(id);
+        if(order.isPresent()){
+            OrderDTO orderDTO = modelMapper.map(order.get(),OrderDTO.class);
+            Optional<Credit> credit = creditRepository.findById(order.get().getPayment().getId());
+            Optional<DigitalWallet> digitalWallet = digitalWalletRepository.findById(order.get().getPayment().getId());
+            if(credit.isPresent())
+                orderDTO.setPayment(modelMapper.map(credit.get(),CreditDTO.class));
+            if(digitalWallet.isPresent())
+                orderDTO.setPayment(modelMapper.map(digitalWallet.get(), DigitalWalletDTO.class));
+            return orderDTO;
+        }
+        return null;
     }
 }
