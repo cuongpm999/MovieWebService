@@ -46,5 +46,25 @@ public class MovieApi {
         return new ResponseEntity<>(id, HttpStatus.OK);
     }
 
+    @GetMapping(path = "/search", produces = "application/json")
+    public ResponseEntity<List<MovieDTO>> search(@RequestParam(value = "key") String key,
+                                                 @RequestParam(required = false, value = "page") Integer page,
+                                                 @RequestParam("limit") int limit) {
+        List<MovieDTO> res = movieService.search(key, page, limit);
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/filter", produces = "application/json")
+    public ResponseEntity<List<MovieDTO>> filter(@RequestParam(required = false, value = "sort") String sort,
+                                                 @RequestParam(required = false, value = "year") Integer year,
+                                                 @RequestParam(required = false, value = "type") String type,
+                                                 @RequestParam(required = false, value = "country") String country,
+                                                 @RequestParam(required = false, value = "category") String category,
+                                                 @RequestParam(required = false, value = "page") Integer page,
+                                                 @RequestParam("limit") int limit) {
+        List<MovieDTO> res = movieService.filter(sort, year, type, country, category, page, limit);
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
 
 }

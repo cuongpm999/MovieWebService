@@ -12,8 +12,13 @@ import vn.ptit.repositories.CountViewRepository;
 import vn.ptit.repositories.MovieLinkRepository;
 import vn.ptit.repositories.MovieRepository;
 import vn.ptit.services.MovieService;
+import vn.ptit.utils.Pagination;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,6 +32,9 @@ public class MovieServiceImpl implements MovieService {
     private CountViewRepository countViewRepository;
     @Autowired
     ModelMapper modelMapper;
+    @PersistenceContext
+    private EntityManager entityManager;
+
 
     @Override
     @Transactional
@@ -98,5 +106,77 @@ public class MovieServiceImpl implements MovieService {
             m.setStatus(false);
             movieRepository.save(m);
         }
+    }
+
+    @Override
+    public List<MovieDTO> search(String key, Integer page, int limit) {
+        int pageNumber = 1;
+        String jpql = "select m from Movie m where m.status = true and m.name like '%" + key + "%' or m.category like '%" +
+                key + "%' or m.country like '%" + key + "%' or m.director like '%" +
+                key + "%' or m.type like '%" + key + "%'";
+        if (page != null) {
+            pageNumber = page;
+        }
+        Query query = entityManager.createQuery(jpql, Movie.class);
+        query.setFirstResult((pageNumber - 1) * limit);
+        query.setMaxResults(limit);
+
+        List<Movie> movies = query.getResultList();
+        List<MovieDTO> movieDTOS = new ArrayList<>();
+        movies.forEach(m -> {
+            MovieDTO movieDTO = modelMapper.map(m, MovieDTO.class);
+            movieDTO.setCountView(countViewRepository.countCountViewByMovie_Id(movieDTO.getId()));
+            movieDTOS.add(movieDTO);
+        });
+        return movieDTOS;
+    }
+
+    @Override
+    public List<MovieDTO> filter(String sort, Integer year, String type, String country, String category, Integer page, int limit) {
+        int pageNumber = 1;
+        String jpql = "select m from Movie m where m.status = true";
+        if (year != null) {
+            jpql += " and m.year = " + year;
+        }
+        if (type != null) {
+            jpql += " and m.type = '" + type + "'";
+        }
+        if (country != null) {
+            jpql += " and m.country = '" + country + "'";
+        }
+        if (category != null) {
+            jpql += " and m.category like '%" + category + "%'";
+        }
+        if (sort != null) {
+            if (sort.equalsIgnoreCase("post_time")) {
+                jpql += " order by m.year,m.createdAt desc";
+            } else if (sort.equalsIgnoreCase("update_time")) {
+                jpql += " order by m.createdAt desc";
+            }
+        }
+        Query query = entityManager.createQuery(jpql, Movie.class);
+        List<Movie> movies = query.getResultList();
+        List<MovieDTO> movieDTOS = new ArrayList<>();
+        for(Movie m : movies){
+            MovieDTO movieDTO = modelMapper.map(m, MovieDTO.class);
+            movieDTO.setCountView(countViewRepository.countCountViewByMovie_Id(movieDTO.getId()));
+            movieDTOS.add(movieDTO);
+        };
+
+        if (sort != null && sort.equalsIgnoreCase("count_view")) {
+            movieDTOS.sort(new Comparator<MovieDTO>() {
+                @Override
+                public int compare(MovieDTO o1, MovieDTO o2) {
+                    return o2.getCountView() - o1.getCountView();
+                }
+            });
+
+        }
+        if(page!=null){
+            pageNumber = page;
+        }
+        movieDTOS = Pagination.paging(movieDTOS,pageNumber,limit);
+
+        return movieDTOS;
     }
 }
