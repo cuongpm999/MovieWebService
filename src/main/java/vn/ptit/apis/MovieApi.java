@@ -66,5 +66,13 @@ public class MovieApi {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
+    @GetMapping(path = "/same-movie", produces = "application/json")
+    public ResponseEntity<List<MovieDTO>> sameMovie(@RequestParam("id") int id,
+                                                    @RequestParam("category") String category,
+                                                    @RequestParam("limit") int limit) {
+        List<MovieDTO> res = movieService.sameMovie(id, category, limit);
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
 
 }

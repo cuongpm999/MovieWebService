@@ -157,11 +157,12 @@ public class MovieServiceImpl implements MovieService {
         Query query = entityManager.createQuery(jpql, Movie.class);
         List<Movie> movies = query.getResultList();
         List<MovieDTO> movieDTOS = new ArrayList<>();
-        for(Movie m : movies){
+        for (Movie m : movies) {
             MovieDTO movieDTO = modelMapper.map(m, MovieDTO.class);
             movieDTO.setCountView(countViewRepository.countCountViewByMovie_Id(movieDTO.getId()));
             movieDTOS.add(movieDTO);
-        };
+        }
+        ;
 
         if (sort != null && sort.equalsIgnoreCase("count_view")) {
             movieDTOS.sort(new Comparator<MovieDTO>() {
@@ -172,11 +173,37 @@ public class MovieServiceImpl implements MovieService {
             });
 
         }
-        if(page!=null){
+        if (page != null) {
             pageNumber = page;
         }
-        movieDTOS = Pagination.paging(movieDTOS,pageNumber,limit);
+        movieDTOS = Pagination.paging(movieDTOS, pageNumber, limit);
 
+        return movieDTOS;
+    }
+
+    @Override
+    public List<MovieDTO> sameMovie(int id, String category, int limit) {
+        String datas[] = category.split("\\,");
+        String jpql = "select m from Movie m where m.status = true and m.id <> " + id;
+        for (int i = 0; i < datas.length; i++) {
+            if (i == 0)
+                jpql += "and m.category like '%" + datas[i] + "%'";
+            else
+                jpql += "or m.category like '%" + datas[i] + "%'";
+        }
+        jpql += " order by rand ()";
+
+        Query query = entityManager.createQuery(jpql, Movie.class);
+        query.setFirstResult(0);
+        query.setMaxResults(limit);
+
+        List<Movie> movies = query.getResultList();
+        List<MovieDTO> movieDTOS = new ArrayList<>();
+        movies.forEach(m -> {
+            MovieDTO movieDTO = modelMapper.map(m, MovieDTO.class);
+            movieDTO.setCountView(countViewRepository.countCountViewByMovie_Id(movieDTO.getId()));
+            movieDTOS.add(movieDTO);
+        });
         return movieDTOS;
     }
 }

@@ -18,4 +18,5 @@ public interface MovieService {
     public List<MovieDTO> search(String key, Integer page, int limit);
 
     public List<MovieDTO> filter(String sort, Integer year, String type, String country, String category, Integer page, int limit);
+    public List<MovieDTO> sameMovie(int id, String category, int limit);
 }
