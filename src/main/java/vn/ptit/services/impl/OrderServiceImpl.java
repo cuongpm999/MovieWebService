@@ -17,6 +17,7 @@ import vn.ptit.repositories.OrderRepository;
 import vn.ptit.services.OrderService;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -55,8 +56,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<OrderDTO> findOrderByUser(String username) {
-        List<Order> orders = orderRepository.findByUser_UsernameOrderByStartAtDesc(username);
+    public List<OrderDTO> findOrderByUser(String email) {
+        List<Order> orders = orderRepository.findByUser_EmailOrderByStartAtDesc(email);
         List<OrderDTO> orderDTOS = new ArrayList<>();
         orders.forEach(o ->{
             OrderDTO orderDTO = modelMapper.map(o,OrderDTO.class);
@@ -106,5 +107,17 @@ public class OrderServiceImpl implements OrderService {
             return orderDTO;
         }
         return null;
+    }
+
+    @Override
+    public boolean checkOrderExpire(String email) {
+        List<Order> orders = orderRepository.findByUser_EmailOrderByStartAtDesc(email);
+        for(Order o : orders){
+            long currentItem = new Date().getTime();
+            long timeStart = o.getStartAt().getTime();
+            long timeEnd = o.getEndAt().getTime();
+            if(timeStart < currentItem && currentItem < timeEnd) return true;
+        }
+        return false;
     }
 }

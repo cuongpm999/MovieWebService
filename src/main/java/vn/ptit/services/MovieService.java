@@ -19,4 +19,8 @@ public interface MovieService {
 
     public List<MovieDTO> filter(String sort, Integer year, String type, String country, String category, Integer page, int limit);
     public List<MovieDTO> sameMovie(int id, String category, int limit);
+
+    public int countAll();
+    public int countSearch(String key);
+    public int countFilter(Integer year, String type, String country, String category);
 }

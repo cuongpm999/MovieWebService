@@ -10,6 +10,8 @@ import vn.ptit.entities.User;
 import vn.ptit.repositories.UserRepository;
 import vn.ptit.services.UserService;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -19,6 +21,8 @@ public class UserServiceImpl implements UserService {
 
     @Autowired private UserRepository userRepository;
     @Autowired private ModelMapper modelMapper;
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Override
     public UserDTO save(UserDTO userDTO) {
@@ -56,4 +60,5 @@ public class UserServiceImpl implements UserService {
             userRepository.save(u);
         }
     }
+
 }

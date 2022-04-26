@@ -74,5 +74,21 @@ public class MovieApi {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
+    @GetMapping(path = "/count-all", produces = "application/json")
+    public ResponseEntity<Integer> countAll() {
+        return new ResponseEntity<>(movieService.countAll(), HttpStatus.OK);
+    }
 
+    @GetMapping(path = "/count-search", produces = "application/json")
+    public ResponseEntity<Integer> countSearch(@RequestParam(value = "key") String key) {
+        return new ResponseEntity<>(movieService.countSearch(key), HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/count-filter", produces = "application/json")
+    public ResponseEntity<Integer> countFilter(@RequestParam(required = false, value = "year") Integer year,
+                                               @RequestParam(required = false, value = "type") String type,
+                                               @RequestParam(required = false, value = "country") String country,
+                                               @RequestParam(required = false, value = "category") String category) {
+        return new ResponseEntity<>(movieService.countFilter(year, type, country, category), HttpStatus.OK);
+    }
 }

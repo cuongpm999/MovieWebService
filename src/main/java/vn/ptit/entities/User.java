@@ -15,7 +15,7 @@ public class User {
     private int id;
     @Column(name = "fullName", nullable = false, length = 255)
     private String fullName;
-    @Column(name = "email", nullable = false, length = 255)
+    @Column(name = "email", nullable = false, length = 255, unique = true)
     private String email;
     @Column(name = "mobile", nullable = false, length = 255)
     private String mobile;
@@ -24,8 +24,6 @@ public class User {
     @Column(name = "dateOfBirth", nullable = false)
     @JsonFormat(pattern="yyyy-MM-dd")
     private Date dateOfBirth;
-    @Column(name = "username", nullable = false, length = 255)
-    private String username;
     @Column(name = "password", nullable = false, length = 255)
     private String password;
     @Column(name = "position", nullable = false, length = 255)

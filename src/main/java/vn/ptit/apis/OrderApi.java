@@ -21,9 +21,9 @@ public class OrderApi {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
-    @GetMapping("/find-by-username/{username}")
-    public ResponseEntity<List<OrderDTO>> findByUser(@PathVariable("username") String username) {
-        List<OrderDTO> res = orderService.findOrderByUser(username);
+    @GetMapping("/find-by-username/{email}")
+    public ResponseEntity<List<OrderDTO>> findByUser(@PathVariable("email") String email) {
+        List<OrderDTO> res = orderService.findOrderByUser(email);
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
@@ -38,6 +38,13 @@ public class OrderApi {
         OrderDTO res = orderService.findById(id);
         if (res != null) return new ResponseEntity<>(res, HttpStatus.OK);
         return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping("/check-order-expire/{email}")
+    public ResponseEntity<Integer> findById(@PathVariable("email") String email) {
+        boolean flag = orderService.checkOrderExpire(email);
+        if (flag) return new ResponseEntity<>(null, HttpStatus.OK);
+        return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
     }
 
 }

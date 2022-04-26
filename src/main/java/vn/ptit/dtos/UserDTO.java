@@ -18,7 +18,6 @@ public class UserDTO {
     private String mobile;
     private boolean sex;
     private Date dateOfBirth;
-    private String username;
     private String password;
     private String position;
     private String image;

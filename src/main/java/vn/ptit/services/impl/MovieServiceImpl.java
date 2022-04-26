@@ -206,4 +206,40 @@ public class MovieServiceImpl implements MovieService {
         });
         return movieDTOS;
     }
+
+    @Override
+    public int countAll() {
+        List<Movie> movies = movieRepository.findByStatusTrue();
+        return movies.size();
+    }
+
+    @Override
+    public int countSearch(String key) {
+        String jpql = "select m from Movie m where m.status = true and m.name like '%" + key + "%' or m.category like '%" +
+                key + "%' or m.country like '%" + key + "%' or m.director like '%" +
+                key + "%' or m.type like '%" + key + "%'";
+        Query query = entityManager.createQuery(jpql, Movie.class);
+        List<Movie> movies = query.getResultList();
+        return movies.size();
+    }
+
+    @Override
+    public int countFilter(Integer year, String type, String country, String category) {
+        String jpql = "select m from Movie m where m.status = true";
+        if (year != null) {
+            jpql += " and m.year = " + year;
+        }
+        if (type != null) {
+            jpql += " and m.type = '" + type + "'";
+        }
+        if (country != null) {
+            jpql += " and m.country = '" + country + "'";
+        }
+        if (category != null) {
+            jpql += " and m.category like '%" + category + "%'";
+        }
+        Query query = entityManager.createQuery(jpql, Movie.class);
+        List<Movie> movies = query.getResultList();
+        return movies.size();
+    }
 }
