@@ -11,6 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(path = "/api/order")
+@CrossOrigin(origins = "*")
 public class OrderApi {
     @Autowired
     private OrderService orderService;

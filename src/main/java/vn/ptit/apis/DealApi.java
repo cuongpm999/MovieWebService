@@ -11,6 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(path = "/api/deal")
+@CrossOrigin(origins = "*")
 public class DealApi {
     @Autowired
     private DealService dealService;
