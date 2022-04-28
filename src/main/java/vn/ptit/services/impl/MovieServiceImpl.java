@@ -149,7 +149,7 @@ public class MovieServiceImpl implements MovieService {
         }
         if (sort != null) {
             if (sort.equalsIgnoreCase("post_time")) {
-                jpql += " order by m.year,m.createdAt desc";
+                jpql += " order by m.year desc,m.createdAt desc";
             } else if (sort.equalsIgnoreCase("update_time")) {
                 jpql += " order by m.createdAt desc";
             }

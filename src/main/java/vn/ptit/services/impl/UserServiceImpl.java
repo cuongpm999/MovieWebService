@@ -19,16 +19,18 @@ import java.util.Optional;
 @Service
 public class UserServiceImpl implements UserService {
 
-    @Autowired private UserRepository userRepository;
-    @Autowired private ModelMapper modelMapper;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private ModelMapper modelMapper;
     @PersistenceContext
     private EntityManager entityManager;
 
     @Override
     public UserDTO save(UserDTO userDTO) {
-        User user = modelMapper.map(userDTO,User.class);
+        User user = modelMapper.map(userDTO, User.class);
         user = userRepository.save(user);
-        return modelMapper.map(user,UserDTO.class);
+        return modelMapper.map(user, UserDTO.class);
     }
 
     @Override
@@ -36,7 +38,7 @@ public class UserServiceImpl implements UserService {
         List<User> users = userRepository.findByStatusTrue();
         List<UserDTO> userDTOS = new ArrayList<>();
         users.forEach(u -> {
-            userDTOS.add(modelMapper.map(u,UserDTO.class));
+            userDTOS.add(modelMapper.map(u, UserDTO.class));
         });
         return userDTOS;
     }
@@ -59,6 +61,26 @@ public class UserServiceImpl implements UserService {
             u.setStatus(false);
             userRepository.save(u);
         }
+    }
+
+    @Override
+    public UserDTO login(String email, String password) {
+        User user = userRepository.findWithEmailAndPassword(email, password);
+        if (user != null) {
+            UserDTO userDTO = modelMapper.map(user, UserDTO.class);
+            return userDTO;
+        }
+        return null;
+    }
+
+    @Override
+    public UserDTO findWithEmail(String email) {
+        User user = userRepository.findWithEmail(email);
+        if (user != null) {
+            UserDTO userDTO = modelMapper.map(user, UserDTO.class);
+            return userDTO;
+        }
+        return null;
     }
 
 }

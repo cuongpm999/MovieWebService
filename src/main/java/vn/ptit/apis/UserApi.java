@@ -33,7 +33,7 @@ public class UserApi {
     @GetMapping(path = "/find/{id}", produces = "application/json")
     public ResponseEntity<UserDTO> findById(@PathVariable("id") int id) {
         UserDTO res = userService.findById(id);
-        if(res !=null){
+        if (res != null) {
             return new ResponseEntity<>(res, HttpStatus.OK);
         }
         return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
@@ -49,5 +49,21 @@ public class UserApi {
     public ResponseEntity<UserDTO> update(@RequestBody UserDTO userDTO) {
         UserDTO res = userService.save(userDTO);
         return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/login", produces = "application/json")
+    public ResponseEntity<UserDTO> login(@RequestParam("email") String email, @RequestParam("password") String password) {
+        UserDTO res = userService.login(email, password);
+        if (res != null)
+            return new ResponseEntity<>(res, HttpStatus.OK);
+        return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
+    }
+
+    @GetMapping(path = "/find-by-email/{email}", produces = "application/json")
+    public ResponseEntity<UserDTO> findByEmail(@PathVariable("email") String email) {
+        UserDTO res = userService.findWithEmail(email);
+        if (res != null)
+            return new ResponseEntity<>(res, HttpStatus.OK);
+        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
 }

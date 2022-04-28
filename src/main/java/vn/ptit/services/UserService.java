@@ -10,4 +10,6 @@ public interface UserService {
     public List<UserDTO> findAll();
     public UserDTO findById(int id);
     public void delete(int id);
+    public UserDTO login(String email, String password);
+    public UserDTO findWithEmail(String email);
 }
