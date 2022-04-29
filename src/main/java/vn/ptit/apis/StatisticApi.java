@@ -22,4 +22,37 @@ public class StatisticApi {
         ChartDTO res = statisticService.statisticIncomeLast5Month();
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
+
+    @GetMapping(path = "/user-total-money", produces = "application/json")
+    public ResponseEntity<ChartDTO> statisticUserTotalMoney() {
+        ChartDTO res = statisticService.statisticUserTotalMoney();
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/movie-view-count", produces = "application/json")
+    public ResponseEntity<ChartDTO> statisticMovieViewCount() {
+        ChartDTO res = statisticService.statisticMovieViewCount();
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/total-order", produces = "application/json")
+    public ResponseEntity<Long> statisticTotalOrder() {
+        return new ResponseEntity<>(statisticService.totalOrder(), HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/total-user", produces = "application/json")
+    public ResponseEntity<Long> statisticTotalUser() {
+        return new ResponseEntity<>(statisticService.totalUser(), HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/total-money", produces = "application/json")
+    public ResponseEntity<Double> statisticTotalMoney() {
+        return new ResponseEntity<>(statisticService.totalMoney(), HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/total-view", produces = "application/json")
+    public ResponseEntity<Long> statisticTotalView() {
+        return new ResponseEntity<>(statisticService.totalView(), HttpStatus.OK);
+    }
+
 }
