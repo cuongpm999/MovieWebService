@@ -2,6 +2,9 @@ package vn.ptit.services.impl;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import vn.ptit.dtos.CreditDTO;
@@ -119,5 +122,35 @@ public class OrderServiceImpl implements OrderService {
             if(timeStart < currentItem && currentItem < timeEnd) return true;
         }
         return false;
+    }
+
+    @Override
+    public List<OrderDTO> findWithPagination(Integer page, int limit) {
+        int pageNumber = 1;
+        if (page != null) {
+            pageNumber = page;
+        }
+        Pageable pageable =
+                PageRequest.of(pageNumber - 1, limit);
+        Page<Order> orders = orderRepository.findAll(pageable);
+        List<OrderDTO> orderDTOS = new ArrayList<>();
+        orders.forEach(o ->{
+            OrderDTO orderDTO = modelMapper.map(o,OrderDTO.class);
+            Optional<Credit> credit = creditRepository.findById(o.getPayment().getId());
+            Optional<DigitalWallet> digitalWallet = digitalWalletRepository.findById(o.getPayment().getId());
+            if(credit.isPresent())
+                orderDTO.setPayment(modelMapper.map(credit.get(),CreditDTO.class));
+            if(digitalWallet.isPresent())
+                orderDTO.setPayment(modelMapper.map(digitalWallet.get(), DigitalWalletDTO.class));
+
+            orderDTOS.add(orderDTO);
+        });
+
+        return orderDTOS;
+    }
+
+    @Override
+    public long totalOrder() {
+        return orderRepository.count();
     }
 }

@@ -12,4 +12,6 @@ public interface UserService {
     public void delete(int id);
     public UserDTO login(String email, String password);
     public UserDTO findWithEmail(String email);
+    public List<UserDTO> findWithPagination(Integer page,int limit);
+    public long totalUser();
 }

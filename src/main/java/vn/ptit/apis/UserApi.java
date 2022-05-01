@@ -56,7 +56,7 @@ public class UserApi {
         UserDTO res = userService.login(email, password);
         if (res != null)
             return new ResponseEntity<>(res, HttpStatus.OK);
-        return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
+        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
 
     @GetMapping(path = "/find-by-email/{email}", produces = "application/json")
@@ -65,5 +65,17 @@ public class UserApi {
         if (res != null)
             return new ResponseEntity<>(res, HttpStatus.OK);
         return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping(path = "/find-with-pagination", produces = "application/json")
+    public ResponseEntity<List<UserDTO>> findWithPagination(@RequestParam(required = false, value = "page") Integer page,
+                                                            @RequestParam("limit") int limit) {
+        List<UserDTO> res = userService.findWithPagination(page, limit);
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/count-all", produces = "application/json")
+    public ResponseEntity<Long> totalUser() {
+        return new ResponseEntity<>(userService.totalUser(), HttpStatus.OK);
     }
 }

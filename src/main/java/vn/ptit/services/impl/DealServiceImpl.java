@@ -2,6 +2,7 @@ package vn.ptit.services.impl;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import vn.ptit.dtos.DealDTO;
 import vn.ptit.entities.Deal;

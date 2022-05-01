@@ -122,7 +122,7 @@ public class StatisticServiceImpl implements StatisticService {
 
     @Override
     public long totalUser() {
-        return userRepository.count();
+        return userRepository.countWithStatusTrue();
     }
 
     @Override

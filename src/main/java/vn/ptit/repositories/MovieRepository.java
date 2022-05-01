@@ -10,4 +10,6 @@ import java.util.List;
 @Repository
 public interface MovieRepository extends JpaRepository<Movie,Integer> {
     List<Movie> findByStatusTrue();
+    @Query("select count(m.id) from Movie m where m.status = true")
+    Long countWithStatusTrue();
 }

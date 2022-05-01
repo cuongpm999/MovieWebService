@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vn.ptit.dtos.OrderDTO;
+import vn.ptit.dtos.UserDTO;
 import vn.ptit.services.OrderService;
 
 import java.util.List;
@@ -46,6 +47,18 @@ public class OrderApi {
         boolean flag = orderService.checkOrderExpire(email);
         if (flag) return new ResponseEntity<>(null, HttpStatus.OK);
         return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
+    }
+
+    @GetMapping(path = "/find-with-pagination", produces = "application/json")
+    public ResponseEntity<List<OrderDTO>> findWithPagination(@RequestParam(required = false, value = "page") Integer page,
+                                                            @RequestParam("limit") int limit) {
+        List<OrderDTO> res = orderService.findWithPagination(page, limit);
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/count-all", produces = "application/json")
+    public ResponseEntity<Long> totalOrder() {
+        return new ResponseEntity<>(orderService.totalOrder(), HttpStatus.OK);
     }
 
 }

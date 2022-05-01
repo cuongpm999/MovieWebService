@@ -2,6 +2,9 @@ package vn.ptit.services.impl;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import vn.ptit.dtos.MovieDTO;
 import vn.ptit.dtos.UserDTO;
@@ -81,6 +84,27 @@ public class UserServiceImpl implements UserService {
             return userDTO;
         }
         return null;
+    }
+
+    @Override
+    public List<UserDTO> findWithPagination(Integer page, int limit) {
+        int pageNumber = 1;
+        if (page != null) {
+            pageNumber = page;
+        }
+        Pageable pageable =
+                PageRequest.of(pageNumber - 1, limit);
+        Page<User> users = userRepository.findByStatusTrue(pageable);
+        List<UserDTO> userDTOS = new ArrayList<>();
+        users.forEach(u -> {
+            userDTOS.add(modelMapper.map(u, UserDTO.class));
+        });
+        return userDTOS;
+    }
+
+    @Override
+    public long totalUser() {
+        return userRepository.countWithStatusTrue();
     }
 
 }
