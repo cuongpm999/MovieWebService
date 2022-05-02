@@ -29,11 +29,11 @@ public class DealApi {
     }
 
     @GetMapping(path = "/find/{id}", produces = "application/json")
-    public ResponseEntity<DealDTO> findAll(@PathVariable("id") int id) {
+    public ResponseEntity<DealDTO> findById(@PathVariable("id") int id) {
         DealDTO res = dealService.findById(id);
-        if(res != null)
+        if (res != null)
             return new ResponseEntity<>(res, HttpStatus.OK);
-        return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
 
     @PutMapping(path = "/update", produces = "application/json")
@@ -45,7 +45,7 @@ public class DealApi {
     @DeleteMapping(path = "/delete/{id}", produces = "application/json")
     public ResponseEntity<Integer> delete(@PathVariable("id") int id) {
         dealService.delete(id);
-        return new ResponseEntity<>(id,HttpStatus.OK);
+        return new ResponseEntity<>(id, HttpStatus.OK);
     }
 
 }
