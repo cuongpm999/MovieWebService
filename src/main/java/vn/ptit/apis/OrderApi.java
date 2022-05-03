@@ -22,7 +22,7 @@ public class OrderApi {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
-    @GetMapping("/find-by-username/{email}")
+    @GetMapping("/find-by-email/{email}")
     public ResponseEntity<List<OrderDTO>> findByUser(@PathVariable("email") String email) {
         List<OrderDTO> res = orderService.findOrderByUser(email);
         return new ResponseEntity<>(res, HttpStatus.OK);
