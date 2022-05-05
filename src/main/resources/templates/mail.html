@@ -52,9 +52,9 @@
                 <div class="price-box">
                     <figure class="icon"><img src="https://themezinho.net/digiflex/images/icon05.png" alt="Image">
                     </figure>
-                    <div class="months" th:text="${order.deal.month+' month'}"></div>
-                    <div class="price"><b th:text="${#numbers.formatInteger(order.deal.price,0,'POINT')}"></b><span> ₫</span></div>
-                    <div class="save" th:text="${'Discount '+order.deal.discount+'%'}"></div>
+                    <div class="months" th:text="${order.deal.month+' month'}" style="font-size: 20px; font-weight: 600"></div>
+                    <div class="price"><b th:text="${#numbers.formatInteger(order.deal.price,0,'POINT')}" style="font-size: 50px; font-weight: 700"></b><span> ₫</span></div>
+                    <div class="save" th:text="${'Discount '+order.deal.discount+'%'}" style="height: 32px;line-height: 32px;display: inline-block;background: #fde5e5;color: #e90101;padding: 0 20px;border-radius: 32px;font-weight: 600;margin-bottom: 10px;margin-top: 15px;"></div>
                 </div>
             </div>
         </td>
@@ -82,113 +82,5 @@
 
 </table>
 </body>
-
-<style>
-    .price-box {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        background: #fff;
-        padding: 40px;
-        text-align: center;
-        margin: 0 20px;
-    }
-
-    .price-box .icon {
-        width: 100%;
-        display: block;
-        margin-bottom: 15px;
-    }
-
-    .price-box .icon img {
-        height: 64px;
-    }
-
-    .price-box .months {
-        width: 100%;
-        display: block;
-        margin-bottom: 5px;
-        font-size: 18px;
-        font-weight: 600;
-    }
-
-    .price-box .price {
-        width: 100%;
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        justify-content: center;
-        line-height: 1;
-    }
-
-    .price-box .price span {
-        display: inline-block;
-        font-size: 22px;
-        margin-right: 6px;
-    }
-
-    .price-box .price b {
-        display: inline-block;
-        font-size: 70px;
-        font-weight: 800;
-    }
-
-    .price-box .price small {
-        width: 100%;
-        display: block;
-    }
-
-    .price-box .save {
-        height: 32px;
-        line-height: 32px;
-        display: inline-block;
-        background: #fde5e5;
-        color: #e90101;
-        padding: 0 20px;
-        border-radius: 32px;
-        font-weight: 600;
-        margin-bottom: 10px;
-        margin-top: 15px;
-    }
-
-    .price-box .note {
-        width: 100%;
-        display: block;
-    }
-
-    .price-box .note u {
-        text-decoration: line-through;
-        opacity: 0.6;
-        font-weight: 600;
-    }
-
-    .price-box a {
-        width: 100%;
-        height: 66px;
-        line-height: 66px;
-        background: #e90101;
-        color: #fff;
-        font-weight: 800;
-        margin-top: 20px;
-        margin-bottom: 20px;
-        border: 2px solid transparent;
-    }
-
-    .price-box a:hover {
-        background: none;
-        color: #111111;
-        border-color: #e90101;
-        text-decoration: none;
-    }
-
-    .price-box .guarantee {
-        width: 100%;
-        display: block;
-    }
-
-    .price-box .guarantee i {
-        color: green;
-    }
-</style>
 
 </html>
