@@ -15,10 +15,13 @@ import vn.ptit.entities.Credit;
 import vn.ptit.entities.DigitalWallet;
 import vn.ptit.entities.Order;
 import vn.ptit.repositories.CreditRepository;
+import vn.ptit.repositories.DealRepository;
 import vn.ptit.repositories.DigitalWalletRepository;
 import vn.ptit.repositories.OrderRepository;
 import vn.ptit.services.OrderService;
+import vn.ptit.services.SendMailService;
 
+import javax.mail.MessagingException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -29,11 +32,14 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private OrderRepository orderRepository;
     @Autowired
+    private DealRepository dealRepository;
+    @Autowired
     private ModelMapper modelMapper;
     @Autowired
     private CreditRepository creditRepository;
     @Autowired
     private DigitalWalletRepository digitalWalletRepository;
+    @Autowired private SendMailService sendMailService;
 
 
     @Override
@@ -55,6 +61,14 @@ public class OrderServiceImpl implements OrderService {
 
         order = orderRepository.save(order);
         orderDTO = modelMapper.map(order,OrderDTO.class);
+
+        try {
+            order.setDeal(dealRepository.findById(order.getDeal().getId()).get());
+            sendMailService.sendMail(order);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+
         return orderDTO;
     }
 

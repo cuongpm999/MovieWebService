@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Bill Mail</title>
+</head>
+
+<body style="background-color: #f1f1f1;">
+<table style="width: 600px;margin: 0px auto;font-family: monospace;background-color: white;">
+    <tr>
+        <td style="margin-left: 10px;">
+            <div style="width: 100%;display: flex;">
+                <div style="width: 30%;text-align: left;padding-left: 15px;margin-top: 15px;margin-bottom: 15px;">
+                    <img src='https://res.cloudinary.com/cuongpham/image/upload/v1651674885/logo_1_zw73tl.png' width='150px'>
+                </div>
+                <div style="width: 70%;text-align: right;padding-right: 15px;margin-top: 15px;margin-bottom: 15px;">
+                    <h1>HÓA ĐƠN</h1>
+                    <h4 th:text="'Ngày: ' + ${#dates.format(#dates.createNow(), 'dd/MM/yyyy HH:mm:ss')}"></h4>
+                </div>
+            </div>
+            <hr style="margin-top: 1rem;
+        margin-bottom: 1rem;
+        border: 0;
+        border-top: 1px solid rgba(0,0,0,.1);">
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <div style="width: 100%;display: flex;">
+                <div style="width: 50%;text-align: left;padding-left: 15px;margin-bottom: 15px;">
+                    <h4><b>Đến</b></h4>
+                    <p style="margin: 0" th:text="${order.user.fullName}"></p>
+                    <p style="margin: 0" th:text="${order.user.email}"></p>
+                    <p style="margin: 0" th:text="${order.user.mobile}"></p>
+                </div>
+                <div style="width: 50%;text-align: right;padding-right: 15px;margin-bottom: 15px;">
+                    <h4><b>Từ</b></h4>
+                    <p><b>MOVIE PROJECT TEAM 01</b>
+                        <br>0961656067<br>
+                        moviecuongpham@gmail.com<br>
+                        PTIT, Hà Nội
+                    </p>
+                </div>
+            </div>
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            <div style="width:100%;text-align: center;margin-top: 15px;margin-bottom: 15px;">
+                <div class="price-box">
+                    <figure class="icon"><img src="https://themezinho.net/digiflex/images/icon05.png" alt="Image">
+                    </figure>
+                    <div class="months" th:text="${order.deal.month+' month'}"></div>
+                    <div class="price"><b th:text="${#numbers.formatInteger(order.deal.price,0,'POINT')}"></b><span> ₫</span></div>
+                    <div class="save" th:text="${'Discount '+order.deal.discount+'%'}"></div>
+                </div>
+            </div>
+        </td>
+    </tr>
+
+    <tr>
+        <td style="padding-right: 15px;">
+            <div style="width:100%;text-align: right;margin-top: 15px;margin-bottom: 15px;">
+                <b>Tổng tiền: </b> <span th:text="${#numbers.formatInteger(order.payment.totalMoney,0,'POINT')+' ₫'}"></span>
+            </div>
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            <hr style="margin-top: 1rem;
+        margin-bottom: 1rem;
+        border: 0;
+        border-top: 1px solid rgba(0,0,0,.1);">
+            <div style="width:100%;text-align: center;height: 130px;padding-top: 20px;">
+                <h3>Cảm ơn bạn đã mua hàng của chúng tôi</h3>
+            </div>
+        </td>
+    </tr>
+
+</table>
+</body>
+
+<style>
+    .price-box {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        background: #fff;
+        padding: 40px;
+        text-align: center;
+        margin: 0 20px;
+    }
+
+    .price-box .icon {
+        width: 100%;
+        display: block;
+        margin-bottom: 15px;
+    }
+
+    .price-box .icon img {
+        height: 64px;
+    }
+
+    .price-box .months {
+        width: 100%;
+        display: block;
+        margin-bottom: 5px;
+        font-size: 18px;
+        font-weight: 600;
+    }
+
+    .price-box .price {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        line-height: 1;
+    }
+
+    .price-box .price span {
+        display: inline-block;
+        font-size: 22px;
+        margin-right: 6px;
+    }
+
+    .price-box .price b {
+        display: inline-block;
+        font-size: 70px;
+        font-weight: 800;
+    }
+
+    .price-box .price small {
+        width: 100%;
+        display: block;
+    }
+
+    .price-box .save {
+        height: 32px;
+        line-height: 32px;
+        display: inline-block;
+        background: #fde5e5;
+        color: #e90101;
+        padding: 0 20px;
+        border-radius: 32px;
+        font-weight: 600;
+        margin-bottom: 10px;
+        margin-top: 15px;
+    }
+
+    .price-box .note {
+        width: 100%;
+        display: block;
+    }
+
+    .price-box .note u {
+        text-decoration: line-through;
+        opacity: 0.6;
+        font-weight: 600;
+    }
+
+    .price-box a {
+        width: 100%;
+        height: 66px;
+        line-height: 66px;
+        background: #e90101;
+        color: #fff;
+        font-weight: 800;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        border: 2px solid transparent;
+    }
+
+    .price-box a:hover {
+        background: none;
+        color: #111111;
+        border-color: #e90101;
+        text-decoration: none;
+    }
+
+    .price-box .guarantee {
+        width: 100%;
+        display: block;
+    }
+
+    .price-box .guarantee i {
+        color: green;
+    }
+</style>
+
+</html>

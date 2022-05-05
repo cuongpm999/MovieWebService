@@ -22,7 +22,7 @@ import java.util.Properties;
 public class HibernateConfig {
 	@Bean
 	@ConfigurationProperties(prefix = "mysql.datasource")
-	@Profile("dev")
+	@Profile("product")
 	public DataSource dataSource() {
 		return DataSourceBuilder.create().build();
 	}
