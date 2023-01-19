@@ -1,4 +1,4 @@
-# Laptop Web App
+# Movie Web Service
 
 Demo service xem phim, gồm đầy đủ các chức năng của một service xem phim hiện nay.
 
